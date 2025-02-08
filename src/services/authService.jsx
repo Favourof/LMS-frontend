@@ -1,8 +1,8 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:4003/api/auth"; // Adjust based on your backend port
+const API_URL = "https://lms-backend-xoc5.onrender.com/api/auth/"; // Adjust based on your backend port
 
-// 🟢 Signup User
+// 🟢 Signup Use
 export const signup = async (userData) => {
   const response = await axios.post(`${API_URL}/register`, userData);
   return response.data;

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:4003/api"; // Adjust if needed
+const API_URL = "https://lms-backend-xoc5.onrender.com/api"; // Adjust if needed
 
 const apiClient = axios.create({
   baseURL: API_URL,
