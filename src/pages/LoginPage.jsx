@@ -97,7 +97,7 @@ const LoginPage = () => {
             />
           </div>
           <CustomizeButton
-            text={loading ? "Creating Account..." : "Create Account"}
+            text={loading ? "Logging..." : "Log In"}
             disabled={loading}
           />
         </form>
