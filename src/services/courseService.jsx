@@ -80,29 +80,28 @@ export const updateCourseDetails = async (courseId, updatedData) => {
 export const addModulesToCourse = async (courseId, moduleData) => {
   try {
     const response = await apiClient.put(
-      `/courses/${courseId}/modules`,
+      `/courses/${courseId}/modules`, // ✅ Correct URL format
       moduleData,
       {
         headers: { "Content-Type": "multipart/form-data" },
       }
-    );
+    );  
     return response.data;
   } catch (error) {
     console.error(`Error Adding Modules to Course ${courseId}:`, error);
-    throw error.response?.data?.message || "Failed to add modules.";
+    throw error.response?.data?.message || "Failed to add module.";
   }
 };
 
 /**
- * ✅ Update a Specific Module in a Course (Admin Only)
+ * ✅ Update a Specific Module in a Course
  * @param {string} courseId - The ID of the course
- * @param {number} moduleIndex - Index of the module to update
  * @param {FormData} updatedModule - Updated module data
  */
-export const updateModule = async (courseId, moduleIndex, updatedModule) => {
+export const updateModule = async (courseId, updatedModule) => {
   try {
     const response = await apiClient.put(
-      `/courses/${courseId}/modules/${moduleIndex}`,
+      `/courses/${courseId}/module`,
       updatedModule,
       { headers: { "Content-Type": "multipart/form-data" } }
     );

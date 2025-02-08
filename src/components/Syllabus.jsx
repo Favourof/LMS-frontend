@@ -4,12 +4,10 @@ import { FaFilePdf, FaImage, FaMusic, FaVideo, FaEdit } from "react-icons/fa";
 const Syllabus = ({ modules, onEditModule }) => {
   const [expandedModule, setExpandedModule] = useState(null);
 
-  // Toggle expand/collapse
   const toggleModule = (index) => {
     setExpandedModule(expandedModule === index ? null : index);
   };
 
-  // Get file type icon
   const getFileIcon = (contentType) => {
     switch (contentType) {
       case "image":
@@ -41,7 +39,7 @@ const Syllabus = ({ modules, onEditModule }) => {
                 <h3 className="text-lg font-semibold">{module.title}</h3>
               </div>
 
-              {/* Edit Button for Admins */}
+              {/* Edit Button */}
               <button
                 onClick={(e) => {
                   e.stopPropagation();
@@ -53,9 +51,9 @@ const Syllabus = ({ modules, onEditModule }) => {
               </button>
             </div>
 
-            {/* Expanded View for Module Details */}
+            {/* Expanded Module Details */}
             {expandedModule === index && (
-              <div className="mt-2 p-3 bg-white shadow rounded ">
+              <div className="mt-2 p-3 bg-white shadow rounded">
                 {module.contentType === "image" && (
                   <img
                     src={module.contentUrl}

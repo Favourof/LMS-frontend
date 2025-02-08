@@ -1,6 +1,9 @@
+import { FaUserCircle } from "react-icons/fa";
+
 const EnrolledStudents = ({ students }) => {
   if (!students || students.length === 0)
     return <p>No students enrolled yet.</p>;
+  console.log(students);
 
   return (
     <div className="p-4 bg-white shadow rounded">
@@ -11,15 +14,9 @@ const EnrolledStudents = ({ students }) => {
             key={student._id}
             className="flex items-center gap-4 bg-gray-100 p-3 rounded"
           >
-            <img
-              src={student.profileImage || "/assets/default-user.jpg"}
-              className="w-10 h-10 rounded-full"
-              alt={student.name}
-            />
+            <FaUserCircle size={30} className="text-white" />
             <div>
-              <h3 className="text-lg font-semibold">
-                {student.firstname} {student.lastname}
-              </h3>
+              <h3 className="text-lg font-semibold">{student.name}</h3>
               <p className="text-gray-500">{student.email}</p>
             </div>
           </li>

@@ -19,6 +19,7 @@ import AllCoursePage from "./pages/AllcoursePage";
 import CourseDetailsPage from "./pages/CourseDetailsPage";
 import AuthRedirectHandler from "./components/AuthRedirectHandler";
 import AuthContext from "./context/AuthContext";
+import Reviews from "./components/Reviews";
 
 const App = () => {
   const { user, role } = useContext(AuthContext);
@@ -60,7 +61,7 @@ const App = () => {
               <Route index element={<h1>Admin Dashboard</h1>} />
               <Route path="courses" element={<CoursesPage />} />
               <Route path="manage" element={<CreateCourse />} />
-              <Route path="revenue" element={<h1>Revenue</h1>} />
+              <Route path="revenue" element={<Reviews />} />
               <Route path="settings" element={<h1>Settings</h1>} />
             </Route>
           ) : user && role === "student" ? (

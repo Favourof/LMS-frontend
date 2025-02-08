@@ -1,11 +1,18 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getCourseById } from "../services/courseService";
+import {
+  getCourseById,
+  updateCourseDetails,
+  addModulesToCourse,
+} from "../services/courseService";
 import EnrolledStudents from "../components/EnrolledStudents";
 import Syllabus from "../components/Syllabus";
 import Reviews from "../components/Reviews";
 import CourseDetails from "../components/CourseDetails";
-import EditModuleForm from "../components/EditModuleForm"; // New Form for Updating Modules
+import EditModuleForm from "../components/EditModuleForm";
+import UpdateCourseForm from "../components/UpdateCourseForm";
+import AddModuleForm from "../components/AddModuleForm";
+import { toast } from "react-toastify";
 
 const CourseDetailsPage = () => {
   const { courseId } = useParams();
@@ -13,13 +20,17 @@ const CourseDetailsPage = () => {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("details");
   const [editingModule, setEditingModule] = useState(null);
+  const [showUpdateForm, setShowUpdateForm] = useState(false);
+  const [showAddModuleForm, setShowAddModuleForm] = useState(false);
 
   useEffect(() => {
     const fetchCourse = async () => {
       try {
         const courseData = await getCourseById(courseId);
         setCourse(courseData);
+        console.log(courseData, "helo");
       } catch (error) {
+        toast.error("Error fetching course details");
         console.error("Error fetching course:", error);
       } finally {
         setLoading(false);
@@ -33,12 +44,52 @@ const CourseDetailsPage = () => {
   };
 
   const handleModuleUpdate = async (updatedData) => {
+    setLoading(true);
     try {
-      const updatedCourse = await updateSpecificModule(courseId, updatedData);
+      await updateModule(courseId, updatedData);
+      const updatedCourse = await getCourseById(courseId);
       setCourse(updatedCourse);
+      toast.success("Module updated successfully!");
       setEditingModule(null);
     } catch (error) {
+      toast.error("Failed to update module.");
       console.error("Failed to update module:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCourseUpdate = async (updatedData) => {
+    setLoading(true);
+    try {
+      await updateCourseDetails(courseId, updatedData);
+      const updatedCourse = await getCourseById(courseId);
+      setCourse(updatedCourse);
+      toast.success("Course updated successfully!");
+      setShowUpdateForm(false);
+    } catch (error) {
+      toast.error("Failed to update course.");
+      console.error("Failed to update course:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAddModule = async (moduleData) => {
+    console.log("Course ID:", courseId); // ✅ Debugging: Ensure courseId is correct
+    setLoading(true);
+
+    try {
+      await addModulesToCourse(courseId, moduleData); // ✅ Fix: Pass courseId separately
+      const updatedCourse = await getCourseById(courseId);
+      setCourse(updatedCourse);
+      toast.success("Module added successfully!");
+      setShowAddModuleForm(false);
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to add module.");
+      console.error("Failed to add module:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -51,7 +102,11 @@ const CourseDetailsPage = () => {
 
   return (
     <div className="p-4 sm:p-6 max-w-6xl mx-auto">
-      <CourseDetails course={course} />
+      <CourseDetails
+        course={course}
+        onEditCourse={() => setShowUpdateForm(true)}
+        onAddModule={() => setShowAddModuleForm(true)}
+      />
 
       {/* ✅ Tabs Navigation */}
       <div className="flex border-b mt-6 overflow-x-auto">
@@ -82,7 +137,7 @@ const CourseDetailsPage = () => {
         {activeTab === "syllabus" && (
           <Syllabus modules={course.modules} onEditModule={handleEditModule} />
         )}
-        {activeTab === "reviews" && <Reviews />}
+        {activeTab === "reviews" && <Reviews review={course.feedback} />}
       </div>
 
       {/* ✅ Module Editing Form */}
@@ -92,6 +147,24 @@ const CourseDetailsPage = () => {
           moduleIndex={editingModule.index}
           onUpdate={handleModuleUpdate}
           onClose={() => setEditingModule(null)}
+        />
+      )}
+
+      {/* ✅ Update Course Form */}
+      {showUpdateForm && (
+        <UpdateCourseForm
+          course={course}
+          onUpdate={handleCourseUpdate} // ✅ Ensure this function is defined
+          onClose={() => setShowUpdateForm(false)}
+        />
+      )}
+
+      {/* ✅ Add Module Form */}
+      {showAddModuleForm && (
+        <AddModuleForm
+          courseId={courseId}
+          onAdd={handleAddModule}
+          onClose={() => setShowAddModuleForm(false)}
         />
       )}
     </div>

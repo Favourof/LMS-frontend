@@ -1,11 +1,18 @@
 import { useState } from "react";
 import { FaStar } from "react-icons/fa";
-// import UpdateCourseForm from "./UpdateCourseForm";
-// import AddModuleForm from "./AddModuleForm";
+import UpdateCourseForm from "./UpdateCourseForm";
+import AddModuleForm from "./AddModuleForm";
 
-const CourseDetails = ({ course }) => {
+const CourseDetails = ({ course, onUpdateCourse, onAddModule }) => {
   const [showUpdateForm, setShowUpdateForm] = useState(false);
   const [showAddModuleForm, setShowAddModuleForm] = useState(false);
+
+  // Prevent errors by checking if course exists
+  if (!course) {
+    return (
+      <p className="text-center text-gray-500">Loading course details...</p>
+    );
+  }
 
   return (
     <div className="flex flex-col md:flex-row gap-6">
@@ -27,13 +34,13 @@ const CourseDetails = ({ course }) => {
         </div>
         <div className="text-lg font-bold mt-3">${course?.price}</div>
         <p className="text-gray-600 text-md">
-          {course?.description.slice(0, 300)}
+          {course?.description?.slice(0, 300)}
         </p>
       </div>
 
       {/* Admin Actions */}
-      <div className="w-1/3 bg-gray-100 p-4 rounded-lg w-[250px]">
-        <div className="lg:w-auto bg-blue-200 border-2 md:flex sm: hidden ">
+      <div className="w-1/3 bg-gray-100 p-4 w-[300px] rounded-lg">
+        <div className="lg:w-auto bg-blue-200 border-2 md:flex sm:hidden hidden">
           <img
             src={course?.thumbnail || "/assets/default-course.jpg"}
             alt={course?.title}
@@ -41,7 +48,7 @@ const CourseDetails = ({ course }) => {
           />
         </div>
         <button
-          className="bg-blue-500 text-white w-full py-2 rounded mb-2  "
+          className="bg-blue-500 text-white w-full py-2 rounded mb-2"
           onClick={() => setShowUpdateForm(true)}
         >
           Update Course
@@ -54,18 +61,22 @@ const CourseDetails = ({ course }) => {
         </button>
       </div>
 
-      {/* {showUpdateForm && (
+      {showUpdateForm && (
         <UpdateCourseForm
           course={course}
-          closeForm={() => setShowUpdateForm(false)}
+          onUpdate={onUpdateCourse} // ✅ Pass the correct function
+          onClose={() => setShowUpdateForm(false)}
         />
       )}
+
+      {/* ✅ Add Module Modal */}
       {showAddModuleForm && (
         <AddModuleForm
           courseId={course._id}
-          closeForm={() => setShowAddModuleForm(false)}
+          onAdd={onAddModule}
+          onClose={() => setShowAddModuleForm(false)}
         />
-      )} */}
+      )}
     </div>
   );
 };
