@@ -5,7 +5,6 @@ import {
   Navigate,
 } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
-import { AuthProvider } from "./context/AuthContext";
 import { ToastContainer } from "react-toastify";
 import Layout from "./layouts/Layout";
 import LandingPage from "./pages/LandingPage";
@@ -17,7 +16,7 @@ import CoursesPage from "./pages/CoursesPage";
 import CreateCourse from "./pages/CreateCourse";
 import AllCoursePage from "./pages/AllcoursePage";
 import CourseDetailsPage from "./pages/CourseDetailsPage";
-import AuthRedirectHandler from "./components/AuthRedirectHandler";
+// import AuthRedirectHandler from "./components/AuthRedirectHandler";
 import AuthContext from "./context/AuthContext";
 import Reviews from "./components/Reviews";
 
@@ -29,6 +28,8 @@ const App = () => {
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
     const storedRole = localStorage.getItem("role");
+    console.log('hello from the app page');
+    
 
     if (storedUser && storedRole) {
       setLoading(false);
@@ -42,7 +43,7 @@ const App = () => {
   }
 
   return (
-    <AuthProvider>
+    // <AuthProvider>
       <Router>
         <ToastContainer position="top-right" autoClose={3000} />
         {/* <AuthRedirectHandler /> */}
@@ -83,7 +84,7 @@ const App = () => {
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Router>
-    </AuthProvider>
+    // </AuthProvider>
   );
 };
 

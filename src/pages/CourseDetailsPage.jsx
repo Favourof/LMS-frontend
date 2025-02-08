@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   getCourseById,
   updateCourseDetails,
   addModulesToCourse,
+  updateModule,
 } from "../services/courseService";
 import EnrolledStudents from "../components/EnrolledStudents";
 import Syllabus from "../components/Syllabus";
@@ -13,6 +14,7 @@ import EditModuleForm from "../components/EditModuleForm";
 import UpdateCourseForm from "../components/UpdateCourseForm";
 import AddModuleForm from "../components/AddModuleForm";
 import { toast } from "react-toastify";
+import AuthContext from "../context/AuthContext";
 
 const CourseDetailsPage = () => {
   const { courseId } = useParams();
@@ -22,13 +24,14 @@ const CourseDetailsPage = () => {
   const [editingModule, setEditingModule] = useState(null);
   const [showUpdateForm, setShowUpdateForm] = useState(false);
   const [showAddModuleForm, setShowAddModuleForm] = useState(false);
+  const { role } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchCourse = async () => {
       try {
         const courseData = await getCourseById(courseId);
         setCourse(courseData);
-        console.log(courseData, "helo");
+        console.log(courseData, "hello");
       } catch (error) {
         toast.error("Error fetching course details");
         console.error("Error fetching course:", error);
@@ -75,23 +78,7 @@ const CourseDetailsPage = () => {
     }
   };
 
-  const handleAddModule = async (moduleData) => {
-    console.log("Course ID:", courseId); // ✅ Debugging: Ensure courseId is correct
-    setLoading(true);
-
-    try {
-      await addModulesToCourse(courseId, moduleData); // ✅ Fix: Pass courseId separately
-      const updatedCourse = await getCourseById(courseId);
-      setCourse(updatedCourse);
-      toast.success("Module added successfully!");
-      setShowAddModuleForm(false);
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to add module.");
-      console.error("Failed to add module:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  
 
   if (loading)
     return (
@@ -109,22 +96,26 @@ const CourseDetailsPage = () => {
       />
 
       {/* ✅ Tabs Navigation */}
-      <div className="flex border-b mt-6 overflow-x-auto">
-        {["details", "students", "syllabus", "reviews"].map((tab) => (
-          <button
-            key={tab}
-            className={`px-4 py-2 sm:px-6 sm:py-3 whitespace-nowrap transition-all duration-300
+      {role === "admin" ? (
+        <div className="flex border-b mt-6 overflow-x-auto">
+          {["details", "students", "syllabus", "reviews"].map((tab) => (
+            <button
+              key={tab}
+              className={`px-4 py-2 sm:px-6 sm:py-3 whitespace-nowrap transition-all duration-300
               ${
                 activeTab === tab
                   ? "border-b-4 border-blue-500 font-semibold text-blue-600"
                   : "text-gray-600 hover:text-blue-500"
               }`}
-            onClick={() => setActiveTab(tab)}
-          >
-            {tab.toUpperCase()}
-          </button>
-        ))}
-      </div>
+              onClick={() => setActiveTab(tab)}
+            >
+              {tab.toUpperCase()}
+            </button>
+          ))}
+        </div>
+      ) : (
+        <h1>Enroll</h1>
+      )}
 
       {/* ✅ Display Tab Content */}
       <div className="mt-6">
@@ -163,7 +154,6 @@ const CourseDetailsPage = () => {
       {showAddModuleForm && (
         <AddModuleForm
           courseId={courseId}
-          onAdd={handleAddModule}
           onClose={() => setShowAddModuleForm(false)}
         />
       )}

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { updateCourseDetails } from "../services/courseService";
 
 const UpdateCourseForm = ({ course, onUpdate, onClose }) => {
   const [formData, setFormData] = useState({
@@ -17,8 +18,22 @@ const UpdateCourseForm = ({ course, onUpdate, onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    await onUpdate(formData);
-    setLoading(false);
+
+    try {
+      console.log(formData);
+      console.log(course._id);
+      
+      const res = await updateCourseDetails( course._id, formData);
+      console.log(res);
+      
+    } catch (error) {
+      console.log('error message', error);
+      
+    }finally{
+      setLoading(false);
+    }
+ 
+  
   };
 
   return (

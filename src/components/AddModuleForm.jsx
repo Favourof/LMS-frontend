@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
+import { addModulesToCourse, getCourseById } from "../services/courseService";
 
 const AddModuleForm = ({ courseId, onAdd, onClose }) => {
   const [title, setTitle] = useState("");
@@ -11,25 +12,27 @@ const AddModuleForm = ({ courseId, onAdd, onClose }) => {
     setLoading(true);
 
     const formData = new FormData();
-    formData.append("title", title);
+    const moduleData = JSON.stringify([{ title }]);
+    formData.append("modules", moduleData);
     if (file) formData.append("file", file);
 
     console.log("Submitting module:", title, file);
-
     try {
-      await onAdd(formData); // ✅ Wait for module to be added BEFORE resetting state
+      await addModulesToCourse(courseId, formData); // ✅ Fix: Pass courseId separately
+      const updatedCourse = await getCourseById(courseId);
+      // setCourse(updatedCourse);
       toast.success("Module added successfully!");
-
-      // ✅ Only reset after a successful submission
-      setTitle("");
-      setFile(null);
+      // setShowAddModuleForm(false);
     } catch (error) {
-      toast.error("Failed to add module.");
-      console.error("Error adding module:", error);
+      toast.error(error.response?.data?.message || "Failed to add module.");
+      console.error("Failed to add module:", error);
     } finally {
       setLoading(false);
     }
+   
   };
+
+  
 
   return (
     <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">

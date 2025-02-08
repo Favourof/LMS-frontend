@@ -15,7 +15,7 @@ const Reviews = ({ review }) => {
           >
             <FaUserCircle size={30} className="text-black" />
             <div>
-              <h3 className="text-lg font-semibold">{student.user.name}</h3>
+              <h3 className="text-lg font-semibold">{student.user.firstname} {student.user.lastname}</h3>
               <span className="text-gray-500">{student.comment}</span>
               <span className="text-gray-500" ml-10> Rating: {student.rating}</span>
             </div>

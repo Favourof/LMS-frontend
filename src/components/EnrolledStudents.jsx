@@ -14,9 +14,9 @@ const EnrolledStudents = ({ students }) => {
             key={student._id}
             className="flex items-center gap-4 bg-gray-100 p-3 rounded"
           >
-            <FaUserCircle size={30} className="text-white" />
+            <FaUserCircle size={30} className="text-black" />
             <div>
-              <h3 className="text-lg font-semibold">{student.name}</h3>
+              <h3 className="text-lg font-semibold">{student.firstname} {student.lastname}</h3>
               <p className="text-gray-500">{student.email}</p>
             </div>
           </li>

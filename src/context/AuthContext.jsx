@@ -2,9 +2,11 @@ import { createContext, useState, useEffect } from "react";
 
 const AuthContext = createContext();
 
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [role, setRole] = useState(null);
+  const [random, setRandom] = useState(9);
 
   useEffect(() => {
     // ✅ Restore User & Role from Local Storage on Page Refresh
@@ -14,8 +16,12 @@ export const AuthProvider = ({ children }) => {
     if (storedUser && storedRole) {
       setUser(storedUser);
       setRole(storedRole);
+      console.log('helllo form the content page', user, role);
+      console.log(random);
+      
+      
     }
-  }, []);
+  }, [random]);
 
   const loginUser = (userData) => {
     localStorage.setItem("user", JSON.stringify(userData));
@@ -33,7 +39,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, role, loginUser, logout }}>
+    <AuthContext.Provider value={{ user, role, random, setRandom, loginUser, logout }}>
       {children}
     </AuthContext.Provider>
   );

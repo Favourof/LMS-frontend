@@ -63,8 +63,13 @@ export const getCourseById = async (courseId) => {
  * @param {object} updatedData - Updated course details
  */
 export const updateCourseDetails = async (courseId, updatedData) => {
+  const data = JSON.stringify(updatedData)
   try {
-    const response = await apiClient.put(`/courses/${courseId}`, updatedData);
+    const response = await apiClient.put(`/courses/${courseId}`, data, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
     return response.data;
   } catch (error) {
     console.error(`Error Updating Course ${courseId}:`, error);

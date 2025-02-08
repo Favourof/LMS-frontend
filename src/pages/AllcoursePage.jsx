@@ -4,12 +4,15 @@ import { FaStar } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { getAdminCourses, getCourses } from "../services/courseService";
 import { CustomizeButton } from "../components/CustomizeButton";
+import { useNavigate } from "react-router-dom";
+
 
 const AllcoursePAge = () => {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sortOption, setSortOption] = useState("relevance");
   const user = JSON.parse(localStorage.getItem("user"));
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchCourses = async () => {
       try {
@@ -28,6 +31,10 @@ const AllcoursePAge = () => {
 
     fetchCourses();
   }, []);
+
+  const handleCourseClick = (courseId) => {
+    navigate(`/courses/${courseId}`);
+  };
 
   return (
     <div className="p-6 min-h-screen">
@@ -60,6 +67,7 @@ const AllcoursePAge = () => {
             <div
               key={course?._id}
               className="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+              onClick={() => handleCourseClick(course._id)}
             >
               {/* ✅ Course Image */}
               <img

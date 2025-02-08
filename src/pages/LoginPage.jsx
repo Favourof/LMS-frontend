@@ -7,6 +7,7 @@ import { login } from "../services/authService";
 import AuthContext from "../context/AuthContext";
 
 const LoginPage = () => {
+  const { user, role, random, setRandom } = useContext(AuthContext);
   const [formData, setFormData] = useState({ email: "", password: "" });
   const { setUser, setToken, setRole } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -42,6 +43,7 @@ const LoginPage = () => {
         isLoading: false,
         autoClose: 3000,
       });
+      setRandom(Math.random() * 10);
 
       // Redirect based on role
       if (response.user.role === "admin") {
