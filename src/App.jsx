@@ -19,6 +19,7 @@ import CourseDetailsPage from "./pages/CourseDetailsPage";
 // import AuthRedirectHandler from "./components/AuthRedirectHandler";
 import AuthContext from "./context/AuthContext";
 import Reviews from "./components/Reviews";
+import AdminDashboardIndexPage from "./pages/AdminDashboardIndexPage";
 
 const App = () => {
   const { user, role } = useContext(AuthContext);
@@ -59,7 +60,7 @@ const App = () => {
           {/* ✅ Auto Route Users to Dashboard Based on Role */}
           {user && role === "admin" ? (
             <Route path="/admin-dashboard" element={<DashboardLayout />}>
-              <Route index element={<h1>Admin Dashboard</h1>} />
+              <Route index element={<AdminDashboardIndexPage />} />
               <Route path="courses" element={<CoursesPage />} />
               <Route path="manage" element={<CreateCourse />} />
               <Route path="revenue" element={<Reviews />} />
@@ -67,7 +68,7 @@ const App = () => {
             </Route>
           ) : user && role === "student" ? (
             <Route path="/dashboard" element={<UserDashboard />}>
-              <Route index element={<h1>User Dashboard</h1>} />
+              <Route index element={<AdminDashboardIndexPage />} />
               <Route path="courses" element={<AllCoursePage />} />
               <Route path="manage" element={<CreateCourse />} />
               <Route path="revenue" element={<h1>Revenue</h1>} />
