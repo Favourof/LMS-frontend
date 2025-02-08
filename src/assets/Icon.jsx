@@ -1,6 +1,6 @@
 // Import images
 import devlop from "./devlop.png";
-import Physics from "./Physics.png";
+import Physics from "./physics.png";
 import astronant from "./astronant.png";
 import marketing from "./marketing.png";
 import topcurses from "./Rectangle.png";
